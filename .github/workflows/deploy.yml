@@ -34,13 +34,13 @@ jobs:
           echo "APP_URL=https://technovaaa-production.up.railway.app/" >> .env
           echo "LOG_CHANNEL=stack" >> .env
           echo "DB_CONNECTION=mysql" >> .env
-          echo "DB_HOST=containers-us-west-149.railway.app" >> .env
-          echo "DB_PORT=3306" >> .env
+          echo "DB_HOST=turntable.proxy.rlwy.net" >> .env
+          echo "DB_PORT=26966" >> .env
           echo "DB_DATABASE=railway" >> .env
           echo "DB_USERNAME=root" >> .env
           echo "DB_PASSWORD=qSJBZoVqilGpUjwulzaNbFQndkcDjnJc" >> .env
           echo "SESSION_DRIVER=file" >> .env
-          echo "SESSION_DOMAIN=" >> .env
+          echo "SESSION_DOMAIN=technovaaa-production.up.railway.app" >> .env
           echo "SESSION_SECURE_COOKIE=true" >> .env
 
       - name: Generate application key
@@ -62,7 +62,7 @@ jobs:
         run: |
           php -r "
           try {
-              \$pdo = new PDO('mysql:host=containers-us-west-149.railway.app;port=3306;dbname=railway', 'root', 'qSJBZoVqilGpUjwulzaNbFQndkcDjnJc');
+              \$pdo = new PDO('mysql:host=turntable.proxy.rlwy.net;port=26966;dbname=railway', 'root', 'qSJBZoVqilGpUjwulzaNbFQndkcDjnJc');
               echo '✅ DB connection successful';
           } catch (PDOException \$e) {
               echo '❌ DB connection failed: ' . \$e->getMessage();
