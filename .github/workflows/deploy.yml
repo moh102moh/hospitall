@@ -30,8 +30,8 @@ jobs:
           echo "APP_NAME=Laravel" >> .env
           echo "APP_ENV=production" >> .env
           echo "APP_KEY=" >> .env
-          echo "APP_DEBUG=false" >> .env
-          echo "APP_URL=https://technovaaa-production.up.railway.app/" >> .env
+          echo "APP_DEBUG=true" >> .env
+          echo "APP_URL=https://hospitall-production.up.railway.app/" >> .env
           echo "LOG_CHANNEL=stack" >> .env
           echo "DB_CONNECTION=mysql" >> .env
           echo "DB_HOST=turntable.proxy.rlwy.net" >> .env
@@ -40,7 +40,7 @@ jobs:
           echo "DB_USERNAME=root" >> .env
           echo "DB_PASSWORD=qSJBZoVqilGpUjwulzaNbFQndkcDjnJc" >> .env
           echo "SESSION_DRIVER=file" >> .env
-          echo "SESSION_DOMAIN=technovaaa-production.up.railway.app" >> .env
+          echo "SESSION_DOMAIN=hospitall-production.up.railway.app" >> .env
           echo "SESSION_SECURE_COOKIE=true" >> .env
 
       - name: Generate application key
