@@ -22,17 +22,6 @@ jobs:
       - name: Install Composer dependencies
         run: composer install --no-dev --optimize-autoloader
 
-      - name: Install Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-
-      - name: Install NPM dependencies
-        run: npm install
-
-      - name: Build frontend assets
-        run: npm run build
-
       - name: Set Laravel permissions
         run: chmod -R 775 storage bootstrap/cache
 
@@ -56,6 +45,17 @@ jobs:
 
       - name: Generate application key
         run: php artisan key:generate --force
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install NPM dependencies
+        run: npm install
+
+      - name: Build Frontend Assets
+        run: npm run prod
 
       - name: Clear Laravel caches
         run: |
