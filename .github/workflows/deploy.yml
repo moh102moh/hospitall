@@ -1,0 +1,79 @@
+name: Deploy Laravel App to Railway
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  laravel-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v3
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, bcmath, pdo, pdo_mysql
+
+      - name: Install Composer dependencies
+        run: composer install --no-dev --optimize-autoloader
+
+      - name: Set Laravel permissions
+        run: chmod -R 775 storage bootstrap/cache
+
+      - name: Create .env file
+        run: |
+          echo "APP_NAME=Laravel" >> .env
+          echo "APP_ENV=production" >> .env
+          echo "APP_KEY=" >> .env
+          echo "APP_DEBUG=false" >> .env
+          echo "APP_URL=https://technovaaa-production.up.railway.app/" >> .env
+          echo "LOG_CHANNEL=stack" >> .env
+          echo "DB_CONNECTION=mysql" >> .env
+          echo "DB_HOST=containers-us-west-149.railway.app" >> .env
+          echo "DB_PORT=3306" >> .env
+          echo "DB_DATABASE=railway" >> .env
+          echo "DB_USERNAME=root" >> .env
+          echo "DB_PASSWORD=qSJBZoVqilGpUjwulzaNbFQndkcDjnJc" >> .env
+          echo "SESSION_DRIVER=file" >> .env
+          echo "SESSION_DOMAIN=" >> .env
+          echo "SESSION_SECURE_COOKIE=true" >> .env
+
+      - name: Generate application key
+        run: php artisan key:generate --force
+
+      - name: Clear Laravel caches
+        run: |
+          php artisan config:clear
+          php artisan route:clear
+          php artisan view:clear
+
+      - name: Cache Laravel config and routes
+        run: |
+          php artisan config:cache
+          php artisan route:cache
+          php artisan view:cache
+
+      - name: Test database connection manually
+        run: |
+          php -r "
+          try {
+              \$pdo = new PDO('mysql:host=containers-us-west-149.railway.app;port=3306;dbname=railway', 'root', 'qSJBZoVqilGpUjwulzaNbFQndkcDjnJc');
+              echo '✅ DB connection successful';
+          } catch (PDOException \$e) {
+              echo '❌ DB connection failed: ' . \$e->getMessage();
+              exit(1);
+          }"
+
+      - name: Run database migrations
+        run: php artisan migrate --force
+
+      - name: Check storage/logs permissions
+        run: |
+          ls -la storage/
+          ls -la storage/logs/
+          touch storage/logs/test.log || echo "❌ Failed to write to storage/logs"
