@@ -22,16 +22,10 @@ jobs:
       - name: Install Composer dependencies
         run: composer install --no-dev --optimize-autoloader
 
-      - name: Install Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-
-      - name: Install NPM dependencies
-        run: npm install
-
-      - name: Build assets using Vite
-        run: npm run build
+      - name: Install NPM dependencies and build assets
+        run: |
+          npm install
+          npm run build
 
       - name: Set Laravel permissions
         run: chmod -R 775 storage bootstrap/cache
@@ -57,9 +51,6 @@ jobs:
       - name: Generate application key
         run: php artisan key:generate --force
 
-      - name: Run database migrations
-        run: php artisan migrate --force
-
       - name: Clear Laravel caches
         run: |
           php artisan config:clear
@@ -82,6 +73,9 @@ jobs:
               echo '❌ DB connection failed: ' . \$e->getMessage();
               exit(1);
           }"
+
+      - name: Run database migrations
+        run: php artisan migrate --force
 
       - name: Check storage/logs permissions
         run: |
